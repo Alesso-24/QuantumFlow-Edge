@@ -59,7 +59,7 @@ def energy(Q: np.ndarray, x: np.ndarray) -> float:
 # ----------------------------------------------------------------------
 # Backend 1: Simulated Annealing (workhorse de la demo)
 # ----------------------------------------------------------------------
-def solve_sa(Q: np.ndarray, n_sweeps: int = 400, n_restarts: int = 8,
+def solve_sa(Q: np.ndarray, n_sweeps: int = 250, n_restarts: int = 4,
              seed: int | None = None) -> tuple[np.ndarray, float, list[float]]:
     """SA con single-bit-flips y delta de energía O(n). Devuelve también la
     traza de convergencia para graficarla en el panel 'Quantum Core'."""
