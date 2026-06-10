@@ -4,8 +4,8 @@
  *
  * Identidad: "Expediente hidráulico × Talavera poblana" (ver src/theme.ts).
  */
-import React, { useState } from "react";
-import { SafeAreaView, View, Text, Pressable, StyleSheet, useWindowDimensions } from "react-native";
+import React, { useEffect, useState } from "react";
+import { ActivityIndicator, SafeAreaView, View, Text, Pressable, StyleSheet, useWindowDimensions } from "react-native";
 import { StatusBar } from "expo-status-bar";
 import { useFonts } from "expo-font";
 import {
@@ -34,18 +34,31 @@ const TABS = [
 type TabKey = (typeof TABS)[number]["key"];
 
 export default function App() {
-  const [fontsLoaded] = useFonts({
+  // fontError también desbloquea: si una fuente falla, la app arranca con
+  // las del sistema (Android sustituye familias desconocidas en silencio).
+  const [fontsLoaded, fontError] = useFonts({
     Unbounded_400Regular, Unbounded_700Bold,
     Archivo_400Regular, Archivo_500Medium, Archivo_700Bold,
     JetBrainsMono_400Regular, JetBrainsMono_700Bold,
   });
+  // Cinturón extra: jamás quedarse en pantalla vacía por las fuentes.
+  const [fontTimeout, setFontTimeout] = useState(false);
+  useEffect(() => {
+    const t = setTimeout(() => setFontTimeout(true), 2500);
+    return () => clearTimeout(t);
+  }, []);
   const feed = useQuantumFeed();
   const [tab, setTab] = useState<TabKey>("home");
   const { width } = useWindowDimensions();
   const compact = width < 560;
 
-  if (!fontsLoaded) {
-    return <SafeAreaView style={styles.root} />;
+  if (!fontsLoaded && !fontError && !fontTimeout) {
+    return (
+      <SafeAreaView style={[styles.root, styles.loadingRoot]}>
+        <ActivityIndicator size="large" color={colors.agua} />
+        <Text style={styles.loadingText}>QUANTUMFLOW EDGE</Text>
+      </SafeAreaView>
+    );
   }
 
   return (
@@ -94,6 +107,9 @@ export default function App() {
 
 const styles = StyleSheet.create({
   root: { flex: 1, backgroundColor: colors.bg },
+  loadingRoot: { alignItems: "center", justifyContent: "center", gap: 18 },
+  // Sin fontFamily a propósito: debe renderizar aunque las fuentes fallen
+  loadingText: { color: colors.textMuted, fontSize: 13, letterSpacing: 4 },
   header: {
     flexDirection: "row", alignItems: "center", gap: 16,
     paddingHorizontal: 18, paddingTop: 16, paddingBottom: 10,

@@ -150,6 +150,22 @@ export default function CityMap({ nodes, pipes, openPipes, onPipePress }: Props)
           );
         })}
 
+        {/* Capa 3.5: áreas táctiles invisibles — en celular un trazo de 2.5px
+            es imposible de tocar; este "hit area" de 22px hace que cualquier
+            dedo acierte la tubería (opacidad ~0 pero sigue recibiendo eventos) */}
+        {pipes.map(p => {
+          const a = pos(p.source);
+          const b = pos(p.target);
+          return (
+            <Line key={`hit-${p.id}`}
+              x1={a.x} y1={a.y} x2={b.x} y2={b.y}
+              stroke={colors.bg} opacity={0.01}
+              strokeWidth={22} strokeLinecap="round"
+              onPress={() => onPipePress(p.id)}
+            />
+          );
+        })}
+
         {/* Capa 4: nodos */}
         {nodes.map(n => {
           const { x, y } = pos(n.id);

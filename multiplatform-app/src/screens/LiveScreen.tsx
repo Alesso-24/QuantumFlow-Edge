@@ -1,6 +1,6 @@
 /** Red en vivo — el centro de control: mapa real + ahorro + modo prueba. */
 import React from "react";
-import { View, Text, Pressable, StyleSheet, useWindowDimensions } from "react-native";
+import { ScrollView, View, Text, Pressable, StyleSheet, useWindowDimensions } from "react-native";
 import CityMap from "../components/CityMap";
 import SavingsPanel from "../components/SavingsPanel";
 import { colors, fonts } from "../theme";
@@ -39,23 +39,45 @@ export default function LiveScreen(feed: Props) {
         al optimizador cuántico reorganizar la red.
       </Text>
 
-      <View style={[styles.body, stacked && { flexDirection: "column" }]}>
-        <CityMap
-          nodes={feed.nodes}
-          pipes={feed.pipes}
-          openPipes={feed.openPipes}
-          onPipePress={feed.simulateLeak}
-        />
-        <SavingsPanel
-          totalSaved={feed.totalSaved}
-          lastSolveMs={feed.lastSolveMs}
-          numQubits={feed.numQubits}
-          convergence={feed.convergence}
-          connected={feed.connected}
-          twinMode={feed.twinMode}
-          horizontal={stacked}
-        />
-      </View>
+      {stacked ? (
+        // Teléfono vertical: mapa a media pantalla y panel debajo, con scroll
+        <ScrollView style={styles.scrollBody} contentContainerStyle={styles.scrollContent}>
+          <View style={styles.mapBox}>
+            <CityMap
+              nodes={feed.nodes}
+              pipes={feed.pipes}
+              openPipes={feed.openPipes}
+              onPipePress={feed.simulateLeak}
+            />
+          </View>
+          <SavingsPanel
+            totalSaved={feed.totalSaved}
+            lastSolveMs={feed.lastSolveMs}
+            numQubits={feed.numQubits}
+            convergence={feed.convergence}
+            connected={feed.connected}
+            twinMode={feed.twinMode}
+            horizontal
+          />
+        </ScrollView>
+      ) : (
+        <View style={styles.body}>
+          <CityMap
+            nodes={feed.nodes}
+            pipes={feed.pipes}
+            openPipes={feed.openPipes}
+            onPipePress={feed.simulateLeak}
+          />
+          <SavingsPanel
+            totalSaved={feed.totalSaved}
+            lastSolveMs={feed.lastSolveMs}
+            numQubits={feed.numQubits}
+            convergence={feed.convergence}
+            connected={feed.connected}
+            twinMode={feed.twinMode}
+          />
+        </View>
+      )}
     </View>
   );
 }
@@ -71,4 +93,7 @@ const styles = StyleSheet.create({
   testButtonText: { color: colors.alarm, fontFamily: fonts.bodyBold, fontSize: 12, letterSpacing: 1 },
   hint: { color: colors.textFaint, fontSize: 11, marginTop: 7, marginBottom: 10, fontFamily: fonts.body },
   body: { flex: 1, flexDirection: "row", gap: 14 },
+  scrollBody: { flex: 1 },
+  scrollContent: { gap: 14, paddingBottom: 24 },
+  mapBox: { height: 430 },
 });

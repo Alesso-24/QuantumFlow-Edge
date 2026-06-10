@@ -1,6 +1,6 @@
 {
   "name": "quantumflow-edge-app",
-  "version": "1.4.0",
+  "version": "1.4.1",
   "main": "node_modules/expo/AppEntry.js",
   "scripts": {
     "start": "expo start",
