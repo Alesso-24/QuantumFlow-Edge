@@ -56,6 +56,8 @@
 | "¿Por qué no un solver clásico (Gurobi)?" | "Para esta demo sería equivalente. Pero el annealing cuántico muestrea soluciones diversas casi-óptimas en redes con incertidumbre — y el costo marginal de nuestro diseño dual-solver es cero." |
 | "¿Falsos positivos de los nodos?" | "Warmup de 30 muestras + EWMA + umbral z=3.5 → tasa de falsa alarma <0.05%. Y una falsa alarma solo cuesta una reoptimización de 1 segundo, no una excavación." |
 | "¿Cómo se actúa físicamente?" | "El mensaje de válvulas del WebSocket es el mismo que recibiría un PLC con válvulas motorizadas — estándar en redes modernas. El eslabón actuador ya existe en la industria." |
+| "¿Y el impacto / los ODS?" | "ODS 6 directo y medible: recuperar un tercio de las fugas físicas son ~260 L/s — agua para ~170,000 personas — sin perforar un pozo nuevo en un acuífero que declina 3.8% anual. Exactamente la misión del OQI: cuántica al servicio de los ODS." |
+| "¿Corre en plataformas reales (qBraid, QCentroid)?" | "Sí. El solver QAOA es Qiskit estándar: se sube a qBraid sin cambiar una línea. Y el QUBO es el formato nativo que consumen plataformas como QCentroid o un annealer de D-Wave — la matriz Q es el contrato, no el hardware." |
 
 ## Checklist del día de la demo
 - [ ] Backend corriendo ANTES de subir al escenario (`QuantumFlowCore.exe`)

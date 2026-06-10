@@ -20,6 +20,23 @@ jobs:
         working-directory: backend-quantum
         run: python -m quantum.qubo_optimizer
 
+  e2e-backend:
+    name: E2E — core + WebSocket + fuga + QUBO
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Instalar dependencias
+        run: pip install fastapi "uvicorn[standard]" numpy pydantic httpx websockets
+      - name: Levantar el core y correr la prueba end-to-end
+        working-directory: backend-quantum
+        run: |
+          uvicorn main:app --port 8000 &
+          for i in $(seq 1 30); do curl -fs http://localhost:8000/health && break; sleep 1; done
+          python test_e2e.py
+
   edge-node-cpp:
     name: Nodo Edge embebido (C++17)
     runs-on: ubuntu-latest

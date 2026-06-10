@@ -102,4 +102,6 @@ API del core: `GET /health` · `GET /network` · `GET /events` · `POST /telemet
 
 <div align="center">
 <sub>Hackathon-LATAM 2026 · Computación cuántica para los desafíos del agua · Puebla, México</sub>
+<br/>
+<sub><b>ODS 6 — Agua limpia y saneamiento</b>: ~260 L/s recuperables = agua para ~170,000 personas sin perforar un pozo nuevo.<br/>En línea con la misión del <a href="https://open-quantum-institute.cern/">Open Quantum Institute (CERN)</a>: computación cuántica al servicio de los Objetivos de Desarrollo Sostenible.</sub>
 </div>
