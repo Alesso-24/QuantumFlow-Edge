@@ -76,7 +76,8 @@ async def run_node(node_id: int, pipe_id: int, client: httpx.AsyncClient,
 
 async def main() -> None:
     parser = argparse.ArgumentParser()
-    parser.add_argument("--nodes", type=int, default=12)
+    # 31 nodos = un sensor por tubería troncal de la red real de Puebla
+    parser.add_argument("--nodes", type=int, default=31)
     parser.add_argument("--leak-every", type=float, default=120,
                         help="ticks promedio entre fugas espontáneas por nodo")
     args = parser.parse_args()

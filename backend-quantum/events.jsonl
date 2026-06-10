@@ -1,0 +1,3 @@
+{"ts": "2026-06-10T03:20:51.366978+00:00", "kind": "simulated_leak", "pipe_id": 7}
+{"ts": "2026-06-10T03:20:51.366978+00:00", "kind": "anomaly_detected", "node_id": -1, "pipe_id": 7, "anomaly_score": 4.8}
+{"ts": "2026-06-10T03:20:51.688669+00:00", "kind": "optimization", "trigger": "edge_node", "pipe_id": 7, "energy": -31451.0, "liters_per_sec_saved": 649.1, "solve_time_ms": 311.5}

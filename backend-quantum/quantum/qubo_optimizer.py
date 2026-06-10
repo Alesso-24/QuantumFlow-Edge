@@ -25,8 +25,11 @@ import numpy as np
 
 from .water_network import WaterNetwork
 
-LAMBDA_DEMAND = 50.0      # penalización por colonia sin suministro (dura)
-LAMBDA_REDUNDANCY = 1.5   # costo suave por mantener tuberías de más abiertas
+# λ_d debe DOMINAR el costo máximo de fuga de cualquier tubería
+# (peor caso red Puebla: (0.13 base + 0.45 anomalía) × 700 L/s ≈ 406)
+# para que dejar una zona sin agua nunca sea "rentable" para el solver.
+LAMBDA_DEMAND = 2000.0    # penalización por zona sin suministro (dura)
+LAMBDA_REDUNDANCY = 25.0  # costo suave por mantener tuberías de más abiertas
 
 
 def build_qubo(net: WaterNetwork) -> np.ndarray:
@@ -145,9 +148,16 @@ def optimize_network(net: WaterNetwork, backend: str = "sa") -> dict:
 
 if __name__ == "__main__":
     # Smoke test: python -m quantum.qubo_optimizer
-    net = WaterNetwork.puebla_demo()
-    print(f"Red: {net.num_nodes} nodos, {len(net.pipes)} tuberías (qubits)")
-    net.report_anomaly(pipe_id=3, severity=0.9)
+    net = WaterNetwork.from_json()
+    print(f"Red Puebla: {net.num_nodes} sectores, {len(net.pipes)} tuberias (qubits)")
+    net.report_anomaly(pipe_id=6, severity=0.9)   # fuga troncal La Paz -> Centro
     result = optimize_network(net, backend="sa")
-    print(f"Energía: {result['energy']} | Ahorro: {result['liters_per_sec_saved']} L/s"
+    print(f"Energia: {result['energy']} | Ahorro: {result['liters_per_sec_saved']} L/s"
           f" | {result['solve_time_ms']} ms")
+
+    # Invariante de producto: NINGUNA zona puede quedar sin suministro
+    open_set = set(result["open_pipes"])
+    for zone in net.demand:
+        assert any(p.id in open_set for p in net.incoming(zone)), \
+            f"VIOLACION: {net.names[zone]} quedo sin suministro"
+    print("OK: las 16 zonas conservan suministro tras aislar la fuga")

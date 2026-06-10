@@ -20,7 +20,7 @@ async def main() -> int:
         print(f"✅ WS conectado: red de {len(first['network']['nodes'])} nodos")
 
         async with httpx.AsyncClient() as client:
-            await client.post("http://localhost:8000/demo/inject-leak/7")
+            await client.post("http://localhost:8000/simulate/leak/7")
 
         # La fuga debe producir telemetría + resultado de optimización
         seen = set()
