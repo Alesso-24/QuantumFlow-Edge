@@ -1,83 +1,90 @@
 /**
- * QuantumFlow Edge — Centro de control de la red hídrica de Puebla.
- * El MISMO código corre en iOS, Android, Web y Desktop (Expo + React Native Web).
- *
- * Servidor configurable: en web, abrir con  ?server=IP:8000
+ * QuantumFlow Edge — el agua de Puebla, optimizada con computación cuántica.
+ * Un solo código: iOS, Android, Web y Escritorio (Expo + React Native Web).
  */
-import React from "react";
-import { SafeAreaView, View, Text, Pressable, StyleSheet } from "react-native";
+import React, { useState } from "react";
+import { SafeAreaView, View, Text, Pressable, StyleSheet, useWindowDimensions } from "react-native";
 import { StatusBar } from "expo-status-bar";
 import { useQuantumFeed } from "./src/hooks/useQuantumFeed";
-import CityMap from "./src/components/CityMap";
-import SavingsPanel from "./src/components/SavingsPanel";
+import HomeScreen from "./src/screens/HomeScreen";
+import LiveScreen from "./src/screens/LiveScreen";
+import HowItWorksScreen from "./src/screens/HowItWorksScreen";
+import DataScreen from "./src/screens/DataScreen";
+import { colors } from "./src/theme";
+
+const TABS = [
+  { key: "home", label: "Inicio", icon: "🏠" },
+  { key: "live", label: "Red en vivo", icon: "🗺️" },
+  { key: "how", label: "Cómo funciona", icon: "⚛️" },
+  { key: "data", label: "Datos", icon: "📊" },
+] as const;
+
+type TabKey = (typeof TABS)[number]["key"];
 
 export default function App() {
   const feed = useQuantumFeed();
+  const [tab, setTab] = useState<TabKey>("home");
+  const { width } = useWindowDimensions();
+  const compact = width < 560;
 
   return (
     <SafeAreaView style={styles.root}>
       <StatusBar style="light" />
+
       <View style={styles.header}>
-        <Text style={styles.logo}>⚛️ QuantumFlow <Text style={{ color: "#00E5FF" }}>Edge</Text></Text>
-        <Text style={styles.subtitle}>
-          Red de agua potable de Puebla · 1.81 M habitantes · 963 colonias
-          {feed.twinMode
-            ? "  ·  🛰️ GEMELO DIGITAL (sin telemetría física)"
-            : `  ·  servidor: ${feed.server}`}
+        <Text style={styles.logo}>
+          ⚛️ QuantumFlow <Text style={{ color: colors.cyan }}>Edge</Text>
         </Text>
-        <Pressable
-          style={styles.testButton}
-          onPress={() => {
-            // Modo prueba: evento de fuga en una tubería aleatoria
-            if (feed.pipes.length > 0) {
-              const random = feed.pipes[Math.floor(Math.random() * feed.pipes.length)];
-              feed.simulateLeak(random.id);
-            }
-          }}
-        >
-          <Text style={styles.testButtonText}>⚠️ Simular fuga (modo prueba)</Text>
-        </Pressable>
+        {!compact && (
+          <Text style={styles.tagline}>El agua de Puebla, optimizada con computación cuántica</Text>
+        )}
+        <View style={[styles.statusDot,
+          { backgroundColor: feed.connected ? colors.green : colors.red }]} />
       </View>
 
-      <View style={styles.body}>
-        <CityMap
-          nodes={feed.nodes}
-          pipes={feed.pipes}
-          openPipes={feed.openPipes}
-          onPipePress={feed.simulateLeak}
-        />
-        <SavingsPanel
-          totalSaved={feed.totalSaved}
-          lastSolveMs={feed.lastSolveMs}
-          numQubits={feed.numQubits}
-          convergence={feed.convergence}
-          connected={feed.connected}
-        />
+      <View style={styles.tabBar}>
+        {TABS.map(t => (
+          <Pressable
+            key={t.key}
+            onPress={() => setTab(t.key)}
+            style={[styles.tabItem, tab === t.key && styles.tabItemActive]}
+          >
+            <Text style={[styles.tabText, tab === t.key && styles.tabTextActive]}>
+              {t.icon} {compact ? "" : t.label}
+            </Text>
+          </Pressable>
+        ))}
       </View>
 
-      <Text style={styles.footer}>
-        Zonas y cifras base: datos públicos de Agua de Puebla / SOAPAP / CONAGUA ·
-        demandas por sector estimadas (metodología en docs/DATA.md) ·
-        telemetría simulada hasta el despliegue de hardware
-      </Text>
+      <View style={styles.content}>
+        {tab === "home" && <HomeScreen goLive={() => setTab("live")} />}
+        {tab === "live" && <LiveScreen {...feed} />}
+        {tab === "how" && <HowItWorksScreen />}
+        {tab === "data" && <DataScreen server={feed.server} twinMode={feed.twinMode} />}
+      </View>
     </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
-  root: { flex: 1, backgroundColor: "#060B18", padding: 16 },
-  header: { flexDirection: "row", alignItems: "center", gap: 16, marginBottom: 12, flexWrap: "wrap" },
-  logo: { color: "#E6F1FF", fontSize: 22, fontWeight: "800" },
-  subtitle: { color: "#5A7396", fontSize: 12, flex: 1 },
-  testButton: {
-    backgroundColor: "#FF3B5C22",
-    borderColor: "#FF3B5C",
-    borderWidth: 1,
-    borderRadius: 10,
-    paddingHorizontal: 14,
-    paddingVertical: 8,
+  root: { flex: 1, backgroundColor: colors.bg },
+  header: {
+    flexDirection: "row", alignItems: "center", gap: 14,
+    paddingHorizontal: 18, paddingTop: 14, paddingBottom: 10,
   },
-  testButtonText: { color: "#FF3B5C", fontWeight: "700", fontSize: 13 },
-  body: { flex: 1, flexDirection: "row", gap: 16 },
-  footer: { color: "#3A4F6E", fontSize: 10, marginTop: 10, textAlign: "center" },
+  logo: { color: colors.text, fontSize: 20, fontWeight: "800" },
+  tagline: { color: colors.textMuted, fontSize: 12, flex: 1 },
+  statusDot: { width: 9, height: 9, borderRadius: 5, marginLeft: "auto" },
+  tabBar: {
+    flexDirection: "row", gap: 6, paddingHorizontal: 14,
+    borderBottomWidth: 1, borderBottomColor: colors.border,
+  },
+  tabItem: {
+    paddingVertical: 10, paddingHorizontal: 14,
+    borderBottomWidth: 2, borderBottomColor: "transparent",
+  },
+  tabItemActive: { borderBottomColor: colors.cyan },
+  tabText: { color: colors.textMuted, fontSize: 14, fontWeight: "600" },
+  tabTextActive: { color: colors.cyan },
+  content: { flex: 1 },
 });

@@ -11,6 +11,7 @@ interface Props {
   numQubits: number | null;
   convergence: number[];
   connected: boolean;
+  horizontal?: boolean;     // true en teléfonos verticales (panel bajo el mapa)
 }
 
 function AnimatedCounter({ value }: { value: number }) {
@@ -26,9 +27,9 @@ function AnimatedCounter({ value }: { value: number }) {
   return <Text style={styles.bigNumber}>{display.toFixed(1)}</Text>;
 }
 
-export default function SavingsPanel({ totalSaved, lastSolveMs, numQubits, convergence, connected }: Props) {
+export default function SavingsPanel({ totalSaved, lastSolveMs, numQubits, convergence, connected, horizontal }: Props) {
   return (
-    <View style={styles.panel}>
+    <View style={[styles.panel, horizontal && { width: "100%" }]}>
       <Text style={styles.title}>💧 AHORRO HÍDRICO</Text>
       <AnimatedCounter value={totalSaved} />
       <Text style={styles.unit}>litros/seg recuperados</Text>
