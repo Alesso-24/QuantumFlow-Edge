@@ -1,0 +1,35 @@
+name: CI — Tests del core
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  quantum-core:
+    name: Optimizador QUBO (Python)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Instalar dependencias mínimas
+        run: pip install numpy fastapi httpx
+      - name: Smoke test del optimizador
+        working-directory: backend-quantum
+        run: python -m quantum.qubo_optimizer
+
+  edge-node-cpp:
+    name: Nodo Edge embebido (C++17)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Compilar y ejecutar detector de anomalías
+        working-directory: edge-ai-nodes
+        run: |
+          cmake -B build -DCMAKE_BUILD_TYPE=Release
+          cmake --build build
+          ./build/edge_node | tail -5
+          # La fuga inyectada en t>=80 DEBE detectarse
+          ./build/edge_node | awk -F, 'NR>1 && $1>=90 && $4==1 {found=1} END {exit !found}'
