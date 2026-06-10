@@ -1,7 +1,20 @@
 # 🌊 QuantumFlow Edge — Hackathon-LATAM 2026 (Puebla)
 
+[![CI](https://github.com/Alesso-24/QuantumFlow-Edge/actions/workflows/ci.yml/badge.svg)](https://github.com/Alesso-24/QuantumFlow-Edge/actions/workflows/ci.yml)
+[![APK Android](https://github.com/Alesso-24/QuantumFlow-Edge/actions/workflows/build-android.yml/badge.svg)](https://github.com/Alesso-24/QuantumFlow-Edge/actions/workflows/build-android.yml)
+[![Demo Web](https://github.com/Alesso-24/QuantumFlow-Edge/actions/workflows/deploy-web.yml/badge.svg)](https://github.com/Alesso-24/QuantumFlow-Edge/actions/workflows/deploy-web.yml)
+
 > **Optimización cuántica de redes hídricas urbanas con detección de anomalías en el borde (Edge AI).**
 > Nodos IoT detectan fugas localmente → un core QUBO redirige el flujo de la ciudad en tiempo real → un dashboard multiplataforma muestra el ahorro hídrico en vivo.
+
+## ⬇️ Descargas y demo
+
+| Plataforma | Enlace |
+|---|---|
+| 🌐 **Demo online** (modo simulación, sin instalar nada) | https://alesso-24.github.io/QuantumFlow-Edge/ |
+| 🤖 **APK Android** | [Releases](https://github.com/Alesso-24/QuantumFlow-Edge/releases) o artifact en [Actions](https://github.com/Alesso-24/QuantumFlow-Edge/actions/workflows/build-android.yml) |
+| 🪟 **Windows .exe** (core cuántico standalone) | se compila con PyInstaller — ver [docs/BUILDS.md](docs/BUILDS.md) |
+| 🍎 **iOS / iPadOS / macOS** | vía EAS Build / Expo Go — ver [docs/BUILDS.md](docs/BUILDS.md) |
 
 ---
 
