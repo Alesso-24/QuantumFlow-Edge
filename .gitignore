@@ -1,0 +1,25 @@
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+build/
+dist/
+*.spec
+
+# Node / Expo
+node_modules/
+.expo/
+web-build/
+multiplatform-app/dist/
+
+# Builds nativos generados (se reconstruyen con expo prebuild)
+multiplatform-app/android/
+multiplatform-app/ios/
+
+# IDE / SO
+.vscode/
+.idea/
+desktop.ini
+.DS_Store
+*.log
