@@ -1,0 +1,11 @@
+fastapi>=0.110
+uvicorn[standard]>=0.29
+numpy>=1.26
+pydantic>=2.6
+# --- Capa cuántica real (opcional para la demo, obligatoria para el pitch) ---
+qiskit>=1.0
+qiskit-aer>=0.14
+qiskit-algorithms>=0.3
+qiskit-optimization>=0.6
+# --- Cliente HTTP usado por los nodos edge ---
+httpx>=0.27
