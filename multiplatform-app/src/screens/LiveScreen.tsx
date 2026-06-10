@@ -3,7 +3,7 @@ import React from "react";
 import { View, Text, Pressable, StyleSheet, useWindowDimensions } from "react-native";
 import CityMap from "../components/CityMap";
 import SavingsPanel from "../components/SavingsPanel";
-import { colors } from "../theme";
+import { colors, fonts } from "../theme";
 import type { QuantumState } from "../hooks/useQuantumFeed";
 
 type Props = QuantumState & { simulateLeak: (id: number) => void };
@@ -60,12 +60,12 @@ export default function LiveScreen(feed: Props) {
 const styles = StyleSheet.create({
   root: { flex: 1, padding: 14 },
   toolbar: { flexDirection: "row", alignItems: "center", gap: 12, flexWrap: "wrap" },
-  toolbarText: { color: colors.textMuted, fontSize: 12, flex: 1 },
+  toolbarText: { color: colors.textMuted, fontSize: 11, flex: 1, fontFamily: fonts.monoRegular },
   testButton: {
-    backgroundColor: "#FF3B5C22", borderColor: colors.red, borderWidth: 1,
-    borderRadius: 10, paddingHorizontal: 14, paddingVertical: 8,
+    backgroundColor: "#FF4D6A1E", borderColor: colors.alarm, borderWidth: 1,
+    borderRadius: 4, paddingHorizontal: 14, paddingVertical: 9,
   },
-  testButtonText: { color: colors.red, fontWeight: "700", fontSize: 13 },
-  hint: { color: colors.textFaint, fontSize: 11, marginTop: 6, marginBottom: 10 },
+  testButtonText: { color: colors.alarm, fontFamily: fonts.bodyBold, fontSize: 12, letterSpacing: 1 },
+  hint: { color: colors.textFaint, fontSize: 11, marginTop: 7, marginBottom: 10, fontFamily: fonts.body },
   body: { flex: 1, flexDirection: "row", gap: 14 },
 });

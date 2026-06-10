@@ -2,7 +2,7 @@
  *  qué es simulado. Además: conexión al servidor configurable. */
 import React, { useState } from "react";
 import { ScrollView, View, Text, TextInput, Pressable, Platform, StyleSheet } from "react-native";
-import { colors, badge } from "../theme";
+import { colors, fonts, badge } from "../theme";
 import { useLiveContext } from "../hooks/useLiveContext";
 
 export default function DataScreen({ server, twinMode }: { server: string; twinMode: boolean }) {
@@ -129,31 +129,31 @@ function LiveStat({ v, l }: { v: string; l: string }) {
 }
 
 const styles = StyleSheet.create({
-  scroll: { padding: 20, maxWidth: 860, width: "100%", alignSelf: "center", paddingBottom: 48 },
-  title: { color: colors.text, fontSize: 30, fontWeight: "800", marginTop: 16 },
-  intro: { color: colors.textDim, fontSize: 15, lineHeight: 23, marginTop: 10, marginBottom: 20 },
+  scroll: { padding: 22, maxWidth: 860, width: "100%", alignSelf: "center", paddingBottom: 56 },
+  title: { color: colors.text, fontSize: 26, fontFamily: fonts.display, marginTop: 18, lineHeight: 36 },
+  intro: { color: colors.textDim, fontSize: 15, lineHeight: 23, marginTop: 12, marginBottom: 22, fontFamily: fonts.body },
   section: {
     backgroundColor: colors.surface, borderColor: colors.border, borderWidth: 1,
-    borderRadius: 14, padding: 18, marginBottom: 14,
+    borderRadius: 6, padding: 20, marginBottom: 14,
   },
   tag: {
-    alignSelf: "flex-start", fontSize: 11, fontWeight: "800", letterSpacing: 1,
-    borderWidth: 1, borderRadius: 6, paddingHorizontal: 8, paddingVertical: 3, marginBottom: 10,
+    alignSelf: "flex-start", fontSize: 10, fontFamily: fonts.monoRegular, letterSpacing: 1.5,
+    borderWidth: 1, borderRadius: 3, paddingHorizontal: 8, paddingVertical: 4, marginBottom: 12,
   },
-  sectionTitle: { color: colors.text, fontSize: 16, fontWeight: "800", marginBottom: 12 },
-  body: { color: colors.textMuted, fontSize: 14, lineHeight: 21 },
-  note: { color: colors.textFaint, fontSize: 11, lineHeight: 16, marginTop: 10 },
-  row: { marginBottom: 9 },
-  rowK: { color: colors.textDim, fontSize: 13, fontWeight: "700" },
-  rowV: { color: colors.textMuted, fontSize: 13, lineHeight: 19 },
-  rowS: { color: colors.textFaint, fontSize: 12 },
+  sectionTitle: { color: colors.text, fontSize: 15, fontFamily: fonts.bodyBold, marginBottom: 12 },
+  body: { color: colors.textMuted, fontSize: 14, lineHeight: 21, fontFamily: fonts.body },
+  note: { color: colors.textFaint, fontSize: 11, lineHeight: 16, marginTop: 12, fontFamily: fonts.body },
+  row: { marginBottom: 10 },
+  rowK: { color: colors.textDim, fontSize: 13, fontFamily: fonts.bodyBold },
+  rowV: { color: colors.textMuted, fontSize: 13, lineHeight: 19, fontFamily: fonts.body },
+  rowS: { color: colors.textFaint, fontSize: 12, fontFamily: fonts.body },
   liveRow: { flexDirection: "row", flexWrap: "wrap", gap: 12 },
   liveStat: {
-    backgroundColor: colors.surfaceAlt, borderRadius: 10, padding: 12,
-    minWidth: 110, alignItems: "center",
+    backgroundColor: colors.surfaceAlt, borderRadius: 4, padding: 14,
+    minWidth: 112, alignItems: "center", borderWidth: 1, borderColor: colors.border,
   },
-  liveV: { color: colors.green, fontSize: 20, fontWeight: "800" },
-  liveL: { color: colors.textMuted, fontSize: 11, marginTop: 3 },
+  liveV: { color: colors.agua, fontSize: 19, fontFamily: fonts.mono },
+  liveL: { color: colors.textMuted, fontSize: 11, marginTop: 4, fontFamily: fonts.body },
   serverRow: { flexDirection: "row", gap: 10, marginTop: 12 },
   serverInput: {
     flex: 1, backgroundColor: colors.surfaceAlt, borderColor: colors.border,

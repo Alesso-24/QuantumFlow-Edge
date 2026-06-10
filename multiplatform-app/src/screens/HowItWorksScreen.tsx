@@ -1,7 +1,7 @@
 /** Cómo funciona — la tecnología explicada sin tecnicismos, paso a paso. */
 import React from "react";
 import { ScrollView, View, Text, StyleSheet } from "react-native";
-import { colors } from "../theme";
+import { colors, fonts } from "../theme";
 
 export default function HowItWorksScreen() {
   return (
@@ -114,32 +114,33 @@ function Faq({ q, children }: { q: string; children: React.ReactNode }) {
 }
 
 const styles = StyleSheet.create({
-  scroll: { padding: 20, maxWidth: 860, width: "100%", alignSelf: "center", paddingBottom: 48 },
-  title: { color: colors.text, fontSize: 30, fontWeight: "800", marginTop: 16 },
-  intro: { color: colors.textDim, fontSize: 15, lineHeight: 23, marginTop: 10, marginBottom: 22 },
+  scroll: { padding: 22, maxWidth: 860, width: "100%", alignSelf: "center", paddingBottom: 56 },
+  title: { color: colors.text, fontSize: 26, fontFamily: fonts.display, marginTop: 18, lineHeight: 36 },
+  intro: { color: colors.textDim, fontSize: 15, lineHeight: 23, marginTop: 12, marginBottom: 24, fontFamily: fonts.body },
   step: {
     backgroundColor: colors.surface, borderColor: colors.border, borderWidth: 1,
-    borderRadius: 14, padding: 20, marginBottom: 14,
+    borderRadius: 6, padding: 22, marginBottom: 14,
   },
   stepHeader: { flexDirection: "row", gap: 14, alignItems: "center", marginBottom: 12 },
   stepN: {
-    color: colors.cyan, fontSize: 24, fontWeight: "800", borderColor: colors.cyan,
-    borderWidth: 2, borderRadius: 24, width: 44, height: 44, textAlign: "center",
+    color: colors.gold, fontSize: 18, fontFamily: fonts.mono, borderColor: colors.border,
+    borderWidth: 1, borderRadius: 4, width: 42, height: 42, textAlign: "center",
     lineHeight: 40,
   },
-  stepTitle: { color: colors.text, fontSize: 17, fontWeight: "800" },
-  stepTech: { color: colors.violet, fontSize: 12, marginTop: 3 },
-  stepBody: { color: colors.textMuted, fontSize: 14, lineHeight: 22 },
-  bold: { color: colors.textDim, fontWeight: "800" },
+  stepTitle: { color: colors.text, fontSize: 16, fontFamily: fonts.bodyBold },
+  stepTech: { color: colors.violet, fontSize: 11, marginTop: 4, fontFamily: fonts.monoRegular, letterSpacing: 0.5 },
+  stepBody: { color: colors.textMuted, fontSize: 14, lineHeight: 22, fontFamily: fonts.body },
+  bold: { color: colors.textDim, fontFamily: fonts.bodyBold },
   flowBox: {
     backgroundColor: colors.surfaceAlt, borderColor: colors.border, borderWidth: 1,
-    borderRadius: 14, padding: 20, marginVertical: 18,
+    borderLeftWidth: 3, borderLeftColor: colors.agua,
+    borderRadius: 6, padding: 22, marginVertical: 18,
   },
-  flowTitle: { color: colors.gold, fontSize: 15, fontWeight: "800", marginBottom: 14 },
-  flowLine: { color: colors.textDim, fontSize: 14, lineHeight: 21 },
-  flowArrow: { color: colors.textFaint, fontSize: 12, marginVertical: 4, marginLeft: 10 },
-  faqTitle: { color: colors.text, fontSize: 22, fontWeight: "800", marginTop: 22, marginBottom: 12 },
-  faq: { marginBottom: 16 },
-  faqQ: { color: colors.cyan, fontSize: 15, fontWeight: "700", marginBottom: 6 },
-  faqA: { color: colors.textMuted, fontSize: 14, lineHeight: 21 },
+  flowTitle: { color: colors.agua, fontSize: 13, fontFamily: fonts.monoRegular, letterSpacing: 2, marginBottom: 16 },
+  flowLine: { color: colors.textDim, fontSize: 14, lineHeight: 21, fontFamily: fonts.body },
+  flowArrow: { color: colors.textFaint, fontSize: 12, marginVertical: 5, marginLeft: 10, fontFamily: fonts.monoRegular },
+  faqTitle: { color: colors.text, fontSize: 20, fontFamily: fonts.display, marginTop: 24, marginBottom: 14, lineHeight: 28 },
+  faq: { marginBottom: 18 },
+  faqQ: { color: colors.text, fontSize: 15, fontFamily: fonts.bodyBold, marginBottom: 6 },
+  faqA: { color: colors.textMuted, fontSize: 14, lineHeight: 21, fontFamily: fonts.body },
 });
