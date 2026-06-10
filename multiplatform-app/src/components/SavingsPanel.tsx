@@ -12,6 +12,7 @@ interface Props {
   numQubits: number | null;
   convergence: number[];
   connected: boolean;
+  twinMode?: boolean;       // true = QUBO resuelto en el propio dispositivo
   horizontal?: boolean;     // true en teléfonos verticales (panel bajo el mapa)
 }
 
@@ -28,7 +29,7 @@ function AnimatedCounter({ value }: { value: number }) {
   return <Text style={styles.bigNumber}>{display.toFixed(1)}</Text>;
 }
 
-export default function SavingsPanel({ totalSaved, lastSolveMs, numQubits, convergence, connected, horizontal }: Props) {
+export default function SavingsPanel({ totalSaved, lastSolveMs, numQubits, convergence, connected, twinMode, horizontal }: Props) {
   return (
     <View style={[styles.panel, horizontal && { width: "100%" }]}>
       <Text style={styles.title}>AHORRO HÍDRICO</Text>
@@ -44,6 +45,7 @@ export default function SavingsPanel({ totalSaved, lastSolveMs, numQubits, conve
       <Text style={styles.title}>QUANTUM CORE</Text>
       <Metric label="Qubits del problema" value={numQubits != null ? `${numQubits}` : "—"} />
       <Metric label="Última optimización" value={lastSolveMs != null ? `${lastSolveMs} ms` : "—"} />
+      <Metric label="Solver" value={twinMode ? "SA · en dispositivo" : "SA · core remoto"} />
       <Metric label="Estado" value={connected ? "● EN LÍNEA" : "○ RECONECTANDO"} accent={connected} />
 
       {convergence.length > 1 && (

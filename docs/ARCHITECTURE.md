@@ -59,6 +59,7 @@ flowchart LR
 | SA como solver por defecto en demo | Determinista y <1 s: una demo en vivo jamás debe depender de la cola de una QPU |
 | WebSocket único hacia todas las pantallas | Teléfono del operador, tablet y videowall ven EXACTAMENTE el mismo estado al mismo tiempo |
 | Modo demo embebido en la app | La versión online (GitHub Pages) funciona sin backend: el link se comparte con jueces |
+| Solver QUBO portado al cliente (TS 1:1) | El gemelo digital no finge: web y APK resuelven la MISMA matriz Q con el MISMO SA en el dispositivo; paridad TS↔Python verificada en CI |
 
 ## Esquemas de datos (contrato entre capas)
 

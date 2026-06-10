@@ -17,7 +17,7 @@ export default function LiveScreen(feed: Props) {
       <View style={styles.toolbar}>
         <Text style={styles.toolbarText}>
           {feed.twinMode
-            ? "🛰️ Gemelo digital de la red real (sin telemetría física)"
+            ? "🛰️ Gemelo digital · red real de Puebla · QUBO real resuelto en tu dispositivo"
             : feed.connected
               ? `🔌 Conectado · ${feed.server}`
               : `⏳ Conectando a ${feed.server}…`}
@@ -52,6 +52,7 @@ export default function LiveScreen(feed: Props) {
           numQubits={feed.numQubits}
           convergence={feed.convergence}
           connected={feed.connected}
+          twinMode={feed.twinMode}
           horizontal={stacked}
         />
       </View>

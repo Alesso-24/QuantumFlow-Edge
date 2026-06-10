@@ -9,6 +9,7 @@
 import { useEffect, useRef, useState } from "react";
 
 import { PUEBLA_NODES, PUEBLA_PIPES } from "../data/pueblaNetwork";
+import { optimizeNetwork } from "../quantum/quboSolver";
 
 export interface NetNode {
   id: number;
@@ -69,35 +70,24 @@ export function useQuantumFeed(): QuantumState & { simulateLeak: (id: number) =>
   const wsRef = useRef<WebSocket | null>(null);
   const twinRef = useRef(false);
 
-  /** Gemelo digital: reproduce la decisión del QUBO localmente.
-   *  Invariante respetado: ninguna zona queda sin tubería de entrada. */
+  /** Gemelo digital: resuelve el QUBO REAL en el dispositivo — el mismo
+   *  algoritmo (matriz Q + Simulated Annealing) del core Python, portado
+   *  1:1 a src/quantum/quboSolver.ts. Nada de animaciones fingidas. */
   const twinOptimize = (pipeId: number) => {
     setState(s => {
       if (s.pipes.length === 0) return s;
+      // Severidad como la calcularía el nodo Edge: z-score 4–6 → min(z/5, 1)
+      const severity = Math.min((4 + Math.random() * 2) / 5, 1);
+      const anomalies = new Map([[pipeId, severity]]);
       const pipes = s.pipes.map(p => ({ ...p, has_anomaly: p.id === pipeId }));
-      const open = new Set<number>(pipes.map(p => p.id));
-
-      const hasOtherSupply = (zone: number, closing: number) =>
-        pipes.some(p => p.target === zone && p.id !== closing && open.has(p.id));
-
-      if (hasOtherSupply(pipes[pipeId].target, pipeId)) open.delete(pipeId);
-      // Poda de redundancia (ahorro extra), nunca a costa del suministro
-      for (const p of pipes) {
-        if (p.id !== pipeId && open.has(p.id) && Math.random() < 0.12 &&
-            hasOtherSupply(p.target, p.id)) {
-          open.delete(p.id);
-        }
-      }
-      const saved = pipes.filter(p => !open.has(p.id))
-        .reduce((acc, p) => acc + p.leak_rate * p.capacity, 0);
-      const trace = Array.from({ length: 13 }, (_, i) =>
-        -31000 * (1 - Math.exp(-i / 3)) + Math.random() * 800);
+      const r = optimizeNetwork(s.nodes, pipes, anomalies);
       return {
-        ...s, pipes, openPipes: open,
-        totalSaved: +(s.totalSaved + saved).toFixed(1),
-        lastSolveMs: +(650 + Math.random() * 350).toFixed(1),
-        numQubits: pipes.length,
-        convergence: trace,
+        ...s, pipes,
+        openPipes: new Set(r.openPipes),
+        totalSaved: +(s.totalSaved + r.litersPerSecSaved).toFixed(1),
+        lastSolveMs: r.solveTimeMs,
+        numQubits: r.numQubits,
+        convergence: r.convergence,
       };
     });
   };

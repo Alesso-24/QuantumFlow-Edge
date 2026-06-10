@@ -33,6 +33,11 @@ el clima es **real en vivo** (Open-Meteo), las demandas por sector son **estimad
 metodología abierta, y la telemetría es **simulada** (gemelo digital) hasta desplegar
 hardware. Cada número lleva su etiqueta: [docs/DATA.md](docs/DATA.md).
 
+**La optimización es real en TODAS las versiones**: la demo online y el APK no
+muestran una animación — ejecutan el solver QUBO real (misma matriz Q, mismo
+Simulated Annealing del core, portado 1:1 a TypeScript) en tu propio dispositivo.
+El CI verifica la paridad TS↔Python y el invariante de suministro en cada commit.
+
 ## ⬇️ Pruébalo
 
 | Plataforma | Cómo |

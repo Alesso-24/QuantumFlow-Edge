@@ -31,6 +31,12 @@ Principio del producto: **cada número tiene etiqueta**. Nada simulado se presen
 |---|---|
 | Telemetría de sensores (flujo/presión) | **Simulada por el gemelo digital.** No hay hardware desplegado: el plan de despliegue contempla nodos ESP32 (<$10 USD c/u) cuyo firmware ya existe en `edge-ai-nodes/edge_node.cpp` con el mismo algoritmo que el simulador. |
 | Eventos de fuga | Generados en modo prueba (`/simulate/leak`) o por el gemelo digital. Las fugas REALES de Puebla existen (21% del caudal) pero no están georreferenciadas públicamente. |
+
+> **Qué NO es simulado**: la optimización. Incluso la demo online y el APK sin
+> backend resuelven el QUBO real (misma matriz Q y mismo Simulated Annealing del
+> core Python, portado 1:1 a `multiplatform-app/src/quantum/quboSolver.ts`) en el
+> dispositivo del visitante. El CI verifica la paridad TS↔Python y el invariante
+> "ninguna zona sin suministro" en cada commit (`solver-check.ts`).
 | Acción sobre válvulas | El resultado del QUBO es un plan de válvulas; el actuador físico (válvulas motorizadas + PLC) es la fase de implementación con el organismo operador. |
 
 ## El número que importa

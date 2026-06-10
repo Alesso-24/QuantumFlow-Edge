@@ -44,7 +44,8 @@
 
 ### 4:20–5:00 · Escala y cierre
 - "Todo es open source, con CI que compila el APK y despliega la demo web en cada commit."
-- "Escanéen este QR: la demo corre en SUS teléfonos ahora mismo." *(QR al GitHub Pages)*
+- "Escanéen este QR: la demo corre en SUS teléfonos ahora mismo — y no es un video:
+  su navegador está resolviendo el QUBO real de 31 qubits en este instante." *(QR al GitHub Pages)*
 - Cierre: "El agua de Puebla no necesita más sensores que recolecten datos.
   Necesita decisiones en milisegundos. Eso es QuantumFlow Edge."
 
