@@ -17,6 +17,9 @@ multiplatform-app/dist/
 multiplatform-app/android/
 multiplatform-app/ios/
 
+# Bitácora de eventos en tiempo de ejecución (auditoría local)
+events.jsonl
+
 # IDE / SO
 .vscode/
 .idea/
