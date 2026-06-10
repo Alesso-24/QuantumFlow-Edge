@@ -19,8 +19,9 @@ El backend completo (API + WebSocket + optimizador QUBO) en un solo `.exe`, sin 
 
 ```powershell
 cd backend-quantum
-.venv\Scripts\pyinstaller --onefile --name QuantumFlowCore --clean --noconfirm run_server.py
+.venv\Scripts\pyinstaller --onefile --name QuantumFlowCore --add-data "data;data" --clean --noconfirm run_server.py
 # Resultado: dist\QuantumFlowCore.exe  →  doble clic y el core está en http://localhost:8000
+# (--add-data empaqueta la red real de Puebla dentro del ejecutable)
 ```
 
 > Nota: el .exe incluye el solver Simulated Annealing (misma matriz QUBO).

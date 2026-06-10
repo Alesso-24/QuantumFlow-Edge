@@ -3,32 +3,37 @@
 ## Estructura (cronometrada)
 
 ### 0:00–0:40 · El gancho
-> "Mientras estuvimos en este hackathon, la zona metropolitana de Puebla perdió
-> millones de litros de agua potable en fugas que nadie vio. México pierde ~40% del
-> agua que potabiliza. No es un problema de tuberías viejas: es un problema de
-> **decisión en tiempo real**. Y decidir cómo redirigir el agua de una ciudad entera
-> es un problema que explota exponencialmente. Exactamente el tipo de problema
-> para el que nació la computación cuántica."
+> "Agua de Puebla entrega 3,718 litros por segundo desde 203 pozos de un acuífero
+> que declina 3.8% cada año. El 41% de esa agua se pierde: 21% en fugas físicas —
+> 20 millones de metros cúbicos al año — y 20% en huachicoleo. Son datos públicos
+> del propio operador, no nuestros. No es un problema de tuberías viejas: es un
+> problema de **decisión en tiempo real**. Y decidir cómo redirigir el agua de una
+> ciudad entera es un problema que explota exponencialmente — exactamente el tipo
+> de problema para el que nació la computación cuántica."
 
 ### 0:40–1:30 · La arquitectura en 3 frases
 1. "Nodos de **10 dólares** en las tuberías detectan la fuga EN el lugar, con
    estadística embebida en C++ — sin nube, sin latencia." *(mostrar edge_node.cpp)*
-2. "Un core cuántico recibe el grafo herido de la ciudad y resuelve un QUBO de 32
-   qubits: qué válvulas cerrar para aislar la fuga **sin dejar a ninguna colonia
-   sin agua**." *(mostrar el panel Quantum Core)*
+2. "Un core cuántico recibe el grafo herido de la ciudad — los 16 sectores REALES de
+   Puebla, de San Jerónimo Caleras a Castillotla — y resuelve un QUBO de 31 qubits:
+   qué válvulas cerrar para aislar la fuga **sin dejar a ninguna colonia sin agua**.
+   Ese invariante no es una promesa: es una aserción que corre en nuestro CI."
 3. "Y el mismo código de interfaz corre en el teléfono del fontanero, la tablet del
    supervisor y el videowall del centro de control."
 
 **La frase que une todo: "La inteligencia vive en la tubería; la estrategia vive en el qubit."**
 
-### 1:30–3:30 · LA DEMO EN VIVO (el momento WOW)
-- Pantalla grande: dashboard con la red fluyendo en azul.
-- **Desde el teléfono**, tocar una tubería → "💥 Inyectar fuga".
+### 1:30–3:30 · LA DEMOSTRACIÓN EN VIVO (el momento WOW)
+- Pantalla grande: el mapa REAL de Puebla con la red fluyendo en azul — el jurado
+  local reconocerá su propia colonia.
+- **Desde el teléfono**, tocar la troncal La Paz→Centro Histórico → "⚠️ Simular fuga".
 - Narrar EN ORDEN lo que se ve: "El nodo la detectó… el QUBO está optimizando —
-  vean la energía converger — … y la red acaba de reorganizarse. Ese contador son
-  los litros que la ciudad deja de perder **cada segundo**."
-- Inyectar una SEGUNDA fuga simultánea: "Con dos fugas el espacio de decisión ya
-  tiene 4 mil millones de combinaciones. Tardó 800 milisegundos."
+  vean la energía converger — … y la red acaba de reorganizarse. Centro Histórico
+  sigue con agua, y ese contador son los litros que la ciudad deja de perder
+  **cada segundo**, ya convertidos a pipas diarias."
+- Simular una SEGUNDA fuga simultánea: "Con dos fugas el espacio de decisión ya
+  tiene 2³¹ combinaciones. Tardó 850 milisegundos. Y quedó escrito en la bitácora
+  de auditoría — esto es un producto operable, no una visualización."
 
 ### 3:30–4:20 · Honestidad técnica (gana credibilidad con jueces expertos)
 > "Hoy el solver corre Simulated Annealing y QAOA sobre simulador Qiskit. ¿Por qué

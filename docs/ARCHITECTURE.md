@@ -39,11 +39,13 @@ flowchart LR
    *Sin nube, sin latencia de red, sin falsos positivos por ruido del sensor.*
 2. **Reporte (t+50 ms):** el nodo envía UN paquete JSON con `pipe_id` y `anomaly_score`.
    El 99.9% del tiempo los nodos no transmiten nada: silencio = salud.
-3. **Formulación (t+100 ms):** el backend marca la fuga en el grafo y reconstruye la
-   matriz Q (32×32 para la red demo). Diagonal = pérdidas por fuga de cada tubería;
-   términos cruzados = restricciones de cobertura de demanda y redundancia.
-4. **Optimización (t+100→900 ms):** el solver explora el espacio de 2³² configuraciones
-   de válvulas y encuentra la de mínima energía: aislar la fuga SIN dejar colonias sin agua.
+3. **Formulación (t+100 ms):** el backend marca la fuga en el grafo real de Puebla
+   (16 sectores + 3 baterías de pozos) y reconstruye la matriz Q (31×31).
+   Diagonal = pérdidas por fuga de cada tubería; términos cruzados = restricciones
+   de cobertura de demanda y redundancia.
+4. **Optimización (t+100→900 ms):** el solver explora el espacio de 2³¹ configuraciones
+   de válvulas y encuentra la de mínima energía: aislar la fuga SIN dejar colonias sin
+   agua (invariante verificado por aserción en CI). El evento queda en `events.jsonl`.
 5. **Actuación (t+1 s):** broadcast por WebSocket. En producción ese mismo mensaje
    abriría/cerraría válvulas motorizadas; en la demo reconfigura el mapa en vivo.
 

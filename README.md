@@ -1,110 +1,90 @@
-# 🌊 QuantumFlow Edge — Hackathon-LATAM 2026 (Puebla)
+# 🌊 QuantumFlow Edge
 
 [![CI](https://github.com/Alesso-24/QuantumFlow-Edge/actions/workflows/ci.yml/badge.svg)](https://github.com/Alesso-24/QuantumFlow-Edge/actions/workflows/ci.yml)
 [![APK Android](https://github.com/Alesso-24/QuantumFlow-Edge/actions/workflows/build-android.yml/badge.svg)](https://github.com/Alesso-24/QuantumFlow-Edge/actions/workflows/build-android.yml)
 [![Demo Web](https://github.com/Alesso-24/QuantumFlow-Edge/actions/workflows/deploy-web.yml/badge.svg)](https://github.com/Alesso-24/QuantumFlow-Edge/actions/workflows/deploy-web.yml)
 
-> **Optimización cuántica de redes hídricas urbanas con detección de anomalías en el borde (Edge AI).**
-> Nodos IoT detectan fugas localmente → un core QUBO redirige el flujo de la ciudad en tiempo real → un dashboard multiplataforma muestra el ahorro hídrico en vivo.
+**Plataforma de reducción de pérdidas de agua para la ciudad de Puebla**: detección de
+fugas en el borde (Edge AI) + redirección óptima del flujo mediante optimización
+cuántica (QUBO) + centro de control multiplataforma.
 
-## ⬇️ Descargas y demo
+> Desarrollado para el *Hackathon-LATAM 2026: Computación cuántica para los desafíos
+> del agua* — diseñado como producto operable, no como prototipo de exhibición.
+
+## El problema (datos reales, fuentes en [docs/DATA.md](docs/DATA.md))
+
+La zona de cobertura de Agua de Puebla/SOAPAP entrega **3,718 L/s** desde **203 pozos**
+de un acuífero que declina **3.8% anual**, a **1.81 millones de habitantes**. De esa
+agua, **40–41% se pierde**: 21% en fugas físicas (~20 millones de m³/año) y 20% en tomas
+no registradas. Solo 135 de 963 colonias tienen servicio 24 horas.
+
+**Lo que este producto ataca:** el 21% de fugas físicas. Detectarlas hoy depende de
+reportes ciudadanos (días o semanas); aquí se detectan en segundos y la red se
+reconfigura sola para contenerlas sin dejar a ninguna zona sin suministro.
+Reducir las fugas físicas a 14% recuperaría **~22,500 m³/día** — agua para ~170,000
+personas sin perforar un pozo nuevo.
+
+## Cómo funciona
+
+1. **Nodos Edge** (firmware C++17 listo para ESP32, <$10 USD/nodo) calculan estadística
+   de flujo *en la tubería* (EWMA + Welford + z-score). Solo transmiten al detectar
+   anomalía: ancho de banda ≈ 0, operan sin internet.
+2. **Core cuántico** (Python): la red troncal de Puebla —16 sectores reales, 3 baterías
+   de pozos, 31 tuberías— se modela como QUBO de 31 qubits. El solver (Simulated
+   Annealing <1 s, o QAOA/Qiskit con la misma matriz) decide qué válvulas cerrar para
+   aislar la fuga **garantizando que ninguna zona pierda suministro** (invariante
+   verificado en CI).
+3. **Centro de control** (Expo/React Native): el mismo código corre en iOS, Android,
+   web y escritorio. Mapa geográfico real, ahorro en L/s, m³/día y pipas equivalentes,
+   bitácora auditable. Servidor configurable con `?server=IP:8000`.
+
+Si no hay backend alcanzable, la app opera como **gemelo digital** de la red real
+(claramente etiquetado) — así funciona la [versión web pública](https://alesso-24.github.io/QuantumFlow-Edge/).
+
+## ⬇️ Obtener el producto
 
 | Plataforma | Enlace |
 |---|---|
-| 🌐 **Demo online** (modo simulación, sin instalar nada) | https://alesso-24.github.io/QuantumFlow-Edge/ |
-| 🤖 **APK Android** | [Releases](https://github.com/Alesso-24/QuantumFlow-Edge/releases) o artifact en [Actions](https://github.com/Alesso-24/QuantumFlow-Edge/actions/workflows/build-android.yml) |
-| 🪟 **Windows .exe** (core cuántico standalone) | se compila con PyInstaller — ver [docs/BUILDS.md](docs/BUILDS.md) |
-| 🍎 **iOS / iPadOS / macOS** | vía EAS Build / Expo Go — ver [docs/BUILDS.md](docs/BUILDS.md) |
+| 🌐 **Web** (gemelo digital, sin instalar) | https://alesso-24.github.io/QuantumFlow-Edge/ |
+| 🤖 **Android (APK)** | [Releases](https://github.com/Alesso-24/QuantumFlow-Edge/releases) |
+| 🪟 **Windows** (`QuantumFlowCore.exe`, backend completo standalone) | compilar con PyInstaller — [docs/BUILDS.md](docs/BUILDS.md) |
+| 🍎 **iOS / iPadOS / macOS** | EAS Build / Expo Go — [docs/BUILDS.md](docs/BUILDS.md) |
 
----
-
-## 📁 Estructura del Monorepo
-
-```
-QuantumFlow-Edge/
-├── README.md                      ← Este archivo (plan + pitch)
-├── backend-quantum/               ← Core cuántico (Python)
-│   ├── requirements.txt
-│   ├── main.py                    ← API FastAPI + WebSocket en tiempo real
-│   └── quantum/
-│       ├── __init__.py
-│       ├── water_network.py       ← Modelo de grafo de la red hídrica
-│       └── qubo_optimizer.py      ← Formulación QUBO + SA + QAOA (Qiskit)
-├── edge-ai-nodes/                 ← Simulación de hardware IoT
-│   ├── node_simulator.py          ← Orquestador de N nodos (Python)
-│   ├── edge_node.cpp              ← Algoritmo de detección embebido (C++17)
-│   └── CMakeLists.txt
-└── multiplatform-app/             ← App universal (iOS/Android/Web/Desktop)
-    ├── package.json
-    ├── app.json
-    ├── App.tsx                    ← Dashboard futurista
-    └── src/
-        ├── hooks/useQuantumFeed.ts ← WebSocket al backend
-        ├── components/CityMap.tsx  ← Mapa SVG de la red en vivo
-        └── components/SavingsPanel.tsx
-```
-
----
-
-## ⏱️ Plan de Ataque — 36 Horas
-
-### FASE 0 · Horas 0–2 — Setup y contrato de datos
-- Crear repos, entornos (`venv`, `npm install`), y **congelar el esquema JSON** entre las 3 capas (telemetría nodo→backend, resultado backend→app). *Esto es lo más importante: permite que los 3 módulos avancen en paralelo sin bloquearse.*
-
-### FASE 1 · Horas 2–10 — El Core Cuántico (prioridad #1 para jueces)
-- Modelar la red de Puebla como grafo (15–25 nodos es el sweet spot: suficiente para verse real, pequeño para que QAOA corra en simulador).
-- Formular el QUBO (pérdidas + penalizaciones de demanda y capacidad).
-- Implementar **doble solver**: Simulated Annealing (demo confiable, <1s) y QAOA con Qiskit (el "factor cuántico real" para la presentación técnica).
-- ✅ Checkpoint hora 10: dado un JSON de fugas, el backend devuelve la reconfiguración óptima de válvulas.
-
-### FASE 2 · Horas 10–18 — Edge AI + integración
-- Simulador de nodos con inyección de fugas aleatorias y detección por z-score/EWMA **en el nodo** (no en el servidor — ese es el argumento Edge).
-- Conectar nodos → FastAPI → optimizador → WebSocket broadcast.
-- ✅ Checkpoint hora 18: pipeline completo corriendo end-to-end en terminal.
-
-### FASE 3 · Horas 18–28 — El Frontend WOW (prioridad #2)
-- Mapa SVG de la ciudad con tuberías que cambian de color (azul=normal, rojo=fuga, verde pulsante=ruta reoptimizada).
-- Contador de litros ahorrados acumulados (animado — los jueces recuerdan números que suben).
-- Panel "Quantum Core" mostrando la energía del QUBO convergiendo en vivo.
-- ✅ Checkpoint hora 28: demo visual completa en web + un build móvil (Expo Go).
-
-### FASE 4 · Horas 28–34 — Pulido y guion de demo
-- Botón "💥 Inyectar fuga" para la demo en vivo (control total ante los jueces).
-- Modo oscuro futurista, animaciones, logo.
-- Ensayar el pitch 3 veces con cronómetro (5 min máx).
-
-### FASE 5 · Horas 34–36 — Buffer y plan B
-- Grabar un video de la demo funcionando (seguro ante fallos de WiFi del venue).
-- Dormir 1 hora. En serio.
-
-**Regla de oro de priorización:** si algo se atrasa, se recorta en este orden: builds nativos de escritorio → QAOA real (queda SA) → número de nodos. **Nunca** se recorta: el mapa en vivo, el contador de ahorro, ni el botón de inyectar fuga.
-
----
-
-## 🚀 Cómo correr todo
+## 🚀 Operación local completa
 
 ```bash
-# Terminal 1 — Backend cuántico
+# Terminal 1 — Core cuántico (o doble clic a QuantumFlowCore.exe)
 cd backend-quantum
 python -m venv .venv && .venv\Scripts\activate
 pip install -r requirements.txt
-uvicorn main:app --reload --port 8000
+uvicorn main:app --port 8000
 
-# Terminal 2 — Nodos Edge
+# Terminal 2 — Flota de sensores (gemelo digital de los 31 puntos de medición)
 cd edge-ai-nodes
 python node_simulator.py
 
-# Terminal 3 — App multiplataforma
+# Terminal 3 — Centro de control
 cd multiplatform-app
 npm install
-npx expo start          # móvil (Expo Go) y web con el MISMO código
+npx expo start          # móvil (Expo Go), web y escritorio con el MISMO código
 ```
 
----
+API del core: `GET /health` · `GET /network` · `GET /events` (auditoría) ·
+`POST /telemetry` · `POST /simulate/leak/{id}` (modo prueba) · `POST /resolve/leak/{id}` · `WS /ws`
 
-## 🏆 El Pitch (resumen — guion completo al final de la sesión con Claude)
+## 📚 Documentación
 
-1. **El problema en números:** México pierde ~40% del agua potable en fugas. Puebla no es la excepción.
-2. **La innovación:** la detección ocurre EN la tubería (Edge AI, sin nube, sin latencia) y la *respuesta* la calcula un optimizador cuántico, porque redirigir flujo en una red es un problema combinatorio NP-hard que explota exponencialmente — exactamente donde lo cuántico tiene ventaja.
-3. **La demo:** inyectamos una fuga en vivo → el nodo la detecta en <1s → el QUBO reconfigura la red → el mapa se reorganiza ante sus ojos → el contador de litros ahorrados sube.
-4. **Escalabilidad:** mismo código corre en el teléfono del operador de campo, la tablet del supervisor y el videowall del centro de control (un solo codebase React Native + Expo).
+- [docs/DATA.md](docs/DATA.md) — **trazabilidad de datos**: qué es real, qué es estimado, qué es simulado (con fuentes)
+- [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) — arquitectura, flujo de un evento de fuga, contratos de datos
+- [docs/BUILDS.md](docs/BUILDS.md) — builds por plataforma y rutas a Play Store / App Store
+- [docs/PITCH.md](docs/PITCH.md) — presentación ejecutiva del producto
+
+## 🗺️ Hoja de ruta a despliegue real
+
+| Fase | Alcance | Estado |
+|---|---|---|
+| 1. Software + gemelo digital | Este repositorio: optimizador, API, app, CI/CD | ✅ Hecho |
+| 2. Piloto de hardware | 31 nodos ESP32 con el firmware de `edge-ai-nodes/` en un sector (p. ej. La Margarita) | Firmware listo; requiere convenio con el organismo operador |
+| 3. Catastro real de red | Sustituir capacidades estimadas por el catastro troncal de SOAPAP | Requiere datos del operador |
+| 4. Actuación física | Válvulas motorizadas/PLC consumiendo el plan del QUBO | Integración estándar industrial |
+| 5. Escala cuántica | Red completa (>10⁴ válvulas) sobre QPU real — misma matriz Q | La formulación ya es agnóstica al hardware |
