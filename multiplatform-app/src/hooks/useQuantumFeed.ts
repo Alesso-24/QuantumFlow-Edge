@@ -8,6 +8,8 @@
  */
 import { useEffect, useRef, useState } from "react";
 
+import { PUEBLA_NODES, PUEBLA_PIPES } from "../data/pueblaNetwork";
+
 export interface NetNode {
   id: number;
   name: string;
@@ -105,10 +107,9 @@ export function useQuantumFeed(): QuantumState & { simulateLeak: (id: number) =>
     let failures = 0;
     let twinTimer: ReturnType<typeof setInterval> | null = null;
 
-    const enterTwinMode = async () => {
+    const enterTwinMode = () => {
       if (twinRef.current || !alive) return;
       twinRef.current = true;
-      const { PUEBLA_NODES, PUEBLA_PIPES } = await import("../data/pueblaNetwork");
       setState(s => ({
         ...s,
         nodes: PUEBLA_NODES,
@@ -165,7 +166,16 @@ export function useQuantumFeed(): QuantumState & { simulateLeak: (id: number) =>
       };
     };
 
-    connect();
+    // Visitante web público (GitHub Pages, etc.): nadie tiene el core en SU
+    // localhost — entrar al gemelo digital de inmediato, sin mapa en blanco.
+    const isPublicWebVisitor =
+      typeof window !== "undefined" && window.location &&
+      !["localhost", "127.0.0.1"].includes(window.location.hostname) &&
+      server.startsWith("localhost");
+
+    if (isPublicWebVisitor) enterTwinMode();
+    else connect();
+
     return () => {
       alive = false;
       if (twinTimer) clearInterval(twinTimer);

@@ -18,7 +18,9 @@ export default function LiveScreen(feed: Props) {
         <Text style={styles.toolbarText}>
           {feed.twinMode
             ? "🛰️ Gemelo digital de la red real (sin telemetría física)"
-            : `🔌 Conectado · ${feed.server}`}
+            : feed.connected
+              ? `🔌 Conectado · ${feed.server}`
+              : `⏳ Conectando a ${feed.server}…`}
         </Text>
         <Pressable
           style={styles.testButton}
