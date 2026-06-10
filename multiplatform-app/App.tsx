@@ -17,7 +17,10 @@ export default function App() {
       <StatusBar style="light" />
       <View style={styles.header}>
         <Text style={styles.logo}>⚛️ QuantumFlow <Text style={{ color: "#00E5FF" }}>Edge</Text></Text>
-        <Text style={styles.subtitle}>Red hídrica de Puebla · optimización cuántica en tiempo real</Text>
+        <Text style={styles.subtitle}>
+          Red hídrica de Puebla · optimización cuántica en tiempo real
+          {feed.demoMode ? "  ·  🎮 MODO DEMO (sin backend)" : ""}
+        </Text>
         <Pressable
           style={styles.demoButton}
           onPress={() => {

@@ -9,8 +9,22 @@
     "splash": {
       "backgroundColor": "#060B18"
     },
+    "android": {
+      "package": "com.quantumflow.edge",
+      "versionCode": 1
+    },
+    "ios": {
+      "bundleIdentifier": "com.quantumflow.edge",
+      "supportsTablet": true
+    },
     "web": {
       "bundler": "metro"
-    }
+    },
+    "experiments": {
+      "baseUrl": "/QuantumFlow-Edge"
+    },
+    "plugins": [
+      "expo-asset"
+    ]
   }
 }
