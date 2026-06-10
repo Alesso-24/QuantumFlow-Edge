@@ -24,7 +24,7 @@ from pydantic import BaseModel
 from quantum.water_network import WaterNetwork
 from quantum.qubo_optimizer import optimize_network
 
-VERSION = "1.3.0"
+VERSION = "1.4.0"
 START_TIME = time.time()
 EVENT_LOG = Path("events.jsonl")   # bitácora auditable, junto al ejecutable
 
