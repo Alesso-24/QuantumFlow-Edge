@@ -1,9 +1,9 @@
 /**
- * Mapa en vivo de la red hídrica de Puebla.
+ * Mapa operativo de la red de agua potable de Puebla (coordenadas reales).
  *  - Tubería cian      → flujo normal
- *  - Tubería roja      → fuga detectada por el nodo Edge
+ *  - Tubería roja      → fuga detectada
  *  - Tubería apagada   → cerrada por el optimizador cuántico
- *  - Tocar una tubería → inyectar fuga (la demo ante los jueces)
+ *  - Tocar una tubería → simular fuga (modo prueba)
  */
 import React from "react";
 import { View, StyleSheet } from "react-native";
@@ -17,22 +17,35 @@ interface Props {
   onPipePress: (pipeId: number) => void;
 }
 
-const SCALE = 110;
-const PAD = 50;
+const W = 1000;
+const H = 640;
+const PAD = 70;
 
 export default function CityMap({ nodes, pipes, openPipes, onPipePress }: Props) {
   if (nodes.length === 0) return <View style={styles.container} />;
 
+  // Proyección equirectangular simple: lon→x, lat→y (invertida para SVG)
+  const lons = nodes.map(n => n.x);
+  const lats = nodes.map(n => n.y);
+  const minLon = Math.min(...lons), maxLon = Math.max(...lons);
+  const minLat = Math.min(...lats), maxLat = Math.max(...lats);
+  const sx = (W - 2 * PAD) / (maxLon - minLon || 1);
+  const sy = (H - 2 * PAD) / (maxLat - minLat || 1);
+
   const pos = (id: number) => {
     const n = nodes.find(n => n.id === id)!;
-    return { x: PAD + n.x * SCALE, y: PAD + n.y * SCALE };
+    return {
+      x: PAD + (n.x - minLon) * sx,
+      y: PAD + (maxLat - n.y) * sy,
+    };
   };
-  const width = PAD * 2 + Math.max(...nodes.map(n => n.x)) * SCALE;
-  const height = PAD * 2 + Math.max(...nodes.map(n => n.y)) * SCALE;
+
+  const shortName = (name: string) =>
+    name.startsWith("Batería") ? "⚡ Pozos" : name.split("–")[0].split("(")[0].trim();
 
   return (
     <View style={styles.container}>
-      <Svg width="100%" height="100%" viewBox={`0 0 ${width} ${height}`}>
+      <Svg width="100%" height="100%" viewBox={`0 0 ${W} ${H}`}>
         {pipes.map(p => {
           const a = pos(p.source);
           const b = pos(p.target);
@@ -43,7 +56,7 @@ export default function CityMap({ nodes, pipes, openPipes, onPipePress }: Props)
               key={p.id}
               x1={a.x} y1={a.y} x2={b.x} y2={b.y}
               stroke={color}
-              strokeWidth={p.has_anomaly ? 5 : isOpen ? 3 : 1.5}
+              strokeWidth={p.has_anomaly ? 6 : isOpen ? 3.5 : 1.5}
               strokeDasharray={isOpen ? undefined : "6 6"}
               opacity={isOpen || p.has_anomaly ? 1 : 0.5}
               onPress={() => onPipePress(p.id)}
@@ -56,14 +69,20 @@ export default function CityMap({ nodes, pipes, openPipes, onPipePress }: Props)
             <React.Fragment key={n.id}>
               <Circle
                 cx={x} cy={y}
-                r={n.is_source ? 14 : 8}
+                r={n.is_source ? 16 : 9}
                 fill={n.is_source ? "#FFD166" : "#0A1A33"}
                 stroke={n.is_source ? "#FFD166" : "#00E5FF"}
                 strokeWidth={2}
               />
-              <SvgText x={x} y={y - 18} fill="#7A93B8" fontSize={10} textAnchor="middle">
-                {n.is_source ? "⚡ Planta" : `N${n.id}`}
+              <SvgText x={x} y={y - 20} fill="#9FB6D4" fontSize={15}
+                       fontWeight="600" textAnchor="middle">
+                {shortName(n.name)}
               </SvgText>
+              {!n.is_source && (
+                <SvgText x={x} y={y + 26} fill="#5A7396" fontSize={11} textAnchor="middle">
+                  {Math.round(n.demand)} L/s
+                </SvgText>
+              )}
             </React.Fragment>
           );
         })}

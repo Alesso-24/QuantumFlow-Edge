@@ -1,6 +1,8 @@
 /**
- * QuantumFlow Edge — Dashboard multiplataforma.
+ * QuantumFlow Edge — Centro de control de la red hídrica de Puebla.
  * El MISMO código corre en iOS, Android, Web y Desktop (Expo + React Native Web).
+ *
+ * Servidor configurable: en web, abrir con  ?server=IP:8000
  */
 import React from "react";
 import { SafeAreaView, View, Text, Pressable, StyleSheet } from "react-native";
@@ -18,20 +20,22 @@ export default function App() {
       <View style={styles.header}>
         <Text style={styles.logo}>⚛️ QuantumFlow <Text style={{ color: "#00E5FF" }}>Edge</Text></Text>
         <Text style={styles.subtitle}>
-          Red hídrica de Puebla · optimización cuántica en tiempo real
-          {feed.demoMode ? "  ·  🎮 MODO DEMO (sin backend)" : ""}
+          Red de agua potable de Puebla · 1.81 M habitantes · 963 colonias
+          {feed.twinMode
+            ? "  ·  🛰️ GEMELO DIGITAL (sin telemetría física)"
+            : `  ·  servidor: ${feed.server}`}
         </Text>
         <Pressable
-          style={styles.demoButton}
+          style={styles.testButton}
           onPress={() => {
-            // Botón de la demo: fuga en una tubería aleatoria de la red
+            // Modo prueba: evento de fuga en una tubería aleatoria
             if (feed.pipes.length > 0) {
               const random = feed.pipes[Math.floor(Math.random() * feed.pipes.length)];
-              feed.injectLeak(random.id);
+              feed.simulateLeak(random.id);
             }
           }}
         >
-          <Text style={styles.demoButtonText}>💥 Inyectar fuga</Text>
+          <Text style={styles.testButtonText}>⚠️ Simular fuga (modo prueba)</Text>
         </Pressable>
       </View>
 
@@ -40,7 +44,7 @@ export default function App() {
           nodes={feed.nodes}
           pipes={feed.pipes}
           openPipes={feed.openPipes}
-          onPipePress={feed.injectLeak}
+          onPipePress={feed.simulateLeak}
         />
         <SavingsPanel
           totalSaved={feed.totalSaved}
@@ -50,6 +54,12 @@ export default function App() {
           connected={feed.connected}
         />
       </View>
+
+      <Text style={styles.footer}>
+        Zonas y cifras base: datos públicos de Agua de Puebla / SOAPAP / CONAGUA ·
+        demandas por sector estimadas (metodología en docs/DATA.md) ·
+        telemetría simulada hasta el despliegue de hardware
+      </Text>
     </SafeAreaView>
   );
 }
@@ -59,7 +69,7 @@ const styles = StyleSheet.create({
   header: { flexDirection: "row", alignItems: "center", gap: 16, marginBottom: 12, flexWrap: "wrap" },
   logo: { color: "#E6F1FF", fontSize: 22, fontWeight: "800" },
   subtitle: { color: "#5A7396", fontSize: 12, flex: 1 },
-  demoButton: {
+  testButton: {
     backgroundColor: "#FF3B5C22",
     borderColor: "#FF3B5C",
     borderWidth: 1,
@@ -67,6 +77,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 14,
     paddingVertical: 8,
   },
-  demoButtonText: { color: "#FF3B5C", fontWeight: "700", fontSize: 13 },
+  testButtonText: { color: "#FF3B5C", fontWeight: "700", fontSize: 13 },
   body: { flex: 1, flexDirection: "row", gap: 16 },
+  footer: { color: "#3A4F6E", fontSize: 10, marginTop: 10, textAlign: "center" },
 });

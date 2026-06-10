@@ -32,6 +32,10 @@ export default function SavingsPanel({ totalSaved, lastSolveMs, numQubits, conve
       <Text style={styles.title}>💧 AHORRO HÍDRICO</Text>
       <AnimatedCounter value={totalSaved} />
       <Text style={styles.unit}>litros/seg recuperados</Text>
+      <Text style={styles.equivalence}>
+        ≈ {Math.round(totalSaved * 86.4).toLocaleString()} m³/día
+        {"  ·  "}{Math.round(totalSaved * 86.4 / 10).toLocaleString()} pipas de 10 m³
+      </Text>
 
       <View style={styles.divider} />
 
@@ -76,6 +80,7 @@ const styles = StyleSheet.create({
   title: { color: "#7A93B8", fontSize: 12, letterSpacing: 2, marginBottom: 8 },
   bigNumber: { color: "#00E5FF", fontSize: 44, fontWeight: "800", fontVariant: ["tabular-nums"] },
   unit: { color: "#5A7396", fontSize: 12, marginBottom: 4 },
+  equivalence: { color: "#3DFFA8", fontSize: 11, marginBottom: 4 },
   divider: { height: 1, backgroundColor: "#13233D", marginVertical: 16 },
   metricRow: { flexDirection: "row", justifyContent: "space-between", marginVertical: 4 },
   metricLabel: { color: "#5A7396", fontSize: 12 },
