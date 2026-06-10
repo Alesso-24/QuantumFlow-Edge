@@ -1,0 +1,16 @@
+{
+  "expo": {
+    "name": "QuantumFlow Edge",
+    "slug": "quantumflow-edge",
+    "version": "1.0.0",
+    "orientation": "landscape",
+    "userInterfaceStyle": "dark",
+    "backgroundColor": "#060B18",
+    "splash": {
+      "backgroundColor": "#060B18"
+    },
+    "web": {
+      "bundler": "metro"
+    }
+  }
+}
