@@ -1,0 +1,82 @@
+{
+  "metadata": {
+    "name": "Red de distribución de agua potable — Zona de cobertura Agua de Puebla / SOAPAP",
+    "version": "1.1.0",
+    "provenance": {
+      "REAL (fuentes públicas)": [
+        "Caudal total entregado: 3,718 L/s (Agua de Puebla, abril 2026)",
+        "203 pozos profundos del Acuífero del Valle de Puebla (CONAGUA DR-2104)",
+        "1,812,000 habitantes servidos en 963 colonias",
+        "Pérdidas totales 40-41%: 21% fugas físicas (~20 Mm³/año) + 20% tomas no registradas",
+        "Solo 135 de 963 colonias con servicio 24 h",
+        "Nombres y coordenadas geográficas de las zonas: reales (ciudad de Puebla)"
+      ],
+      "ESTIMADO (derivado de datos reales, metodología documentada en docs/DATA.md)": [
+        "Poblacion por sector: estimacion propia a partir del total servido (1.81M)",
+        "Demanda por nodo: poblacion x 130 L/hab/dia de consumo efectivo / 86,400 s",
+        "Capacidades de tuberias troncales: estimadas por jerarquia de red",
+        "base_leak por tramo: calibrado para reproducir el ~21% de perdida fisica reportada",
+        "Las 3 baterias de pozos agrupan los 203 pozos reales en 3 nodos fuente representativos"
+      ],
+      "SIMULADO": [
+        "La telemetria de los sensores (no hay hardware desplegado aun): gemelo digital",
+        "Los eventos de fuga inyectados en modo prueba"
+      ]
+    }
+  },
+  "sources_lps_total": 3718,
+  "nodes": [
+    { "id": 0, "name": "Batería de pozos Norte (San Jerónimo–San Aparicio)", "lat": 19.095, "lon": -98.205, "is_source": true, "supply_lps": 1400 },
+    { "id": 1, "name": "Batería de pozos Oriente (Amalucan–La Calera)", "lat": 19.052, "lon": -98.130, "is_source": true, "supply_lps": 1200 },
+    { "id": 2, "name": "Batería de pozos Sur-Poniente (Atlixcáyotl)", "lat": 18.993, "lon": -98.247, "is_source": true, "supply_lps": 1118 },
+    { "id": 3, "name": "Centro Histórico", "lat": 19.044, "lon": -98.198, "population_est": 120000, "demand_lps": 180 },
+    { "id": 4, "name": "Xonaca–El Alto", "lat": 19.050, "lon": -98.183, "population_est": 80000, "demand_lps": 120 },
+    { "id": 5, "name": "La Paz", "lat": 19.056, "lon": -98.223, "population_est": 90000, "demand_lps": 135 },
+    { "id": 6, "name": "San Felipe Hueyotlipan", "lat": 19.083, "lon": -98.212, "population_est": 130000, "demand_lps": 195 },
+    { "id": 7, "name": "San Jerónimo Caleras", "lat": 19.093, "lon": -98.224, "population_est": 100000, "demand_lps": 150 },
+    { "id": 8, "name": "La Margarita", "lat": 19.015, "lon": -98.170, "population_est": 140000, "demand_lps": 210 },
+    { "id": 9, "name": "San Manuel", "lat": 19.023, "lon": -98.178, "population_est": 130000, "demand_lps": 195 },
+    { "id": 10, "name": "Bosques de San Sebastián", "lat": 19.064, "lon": -98.137, "population_est": 120000, "demand_lps": 180 },
+    { "id": 11, "name": "Amalucan", "lat": 19.057, "lon": -98.153, "population_est": 90000, "demand_lps": 135 },
+    { "id": 12, "name": "Agua Santa", "lat": 18.993, "lon": -98.208, "population_est": 80000, "demand_lps": 120 },
+    { "id": 13, "name": "Castillotla–Valle del Paseo", "lat": 18.987, "lon": -98.244, "population_est": 110000, "demand_lps": 165 },
+    { "id": 14, "name": "San Baltazar Campeche", "lat": 19.019, "lon": -98.209, "population_est": 100000, "demand_lps": 150 },
+    { "id": 15, "name": "Las Ánimas", "lat": 19.021, "lon": -98.236, "population_est": 70000, "demand_lps": 105 },
+    { "id": 16, "name": "Angelópolis–Atlixcáyotl", "lat": 19.009, "lon": -98.262, "population_est": 90000, "demand_lps": 135 },
+    { "id": 17, "name": "La Libertad", "lat": 19.056, "lon": -98.235, "population_est": 110000, "demand_lps": 165 },
+    { "id": 18, "name": "Mayorazgo", "lat": 19.008, "lon": -98.221, "population_est": 60000, "demand_lps": 90 }
+  ],
+  "pipes": [
+    { "source": 0, "target": 7, "capacity_lps": 700, "base_leak": 0.06 },
+    { "source": 0, "target": 6, "capacity_lps": 700, "base_leak": 0.08 },
+    { "source": 0, "target": 5, "capacity_lps": 500, "base_leak": 0.10 },
+    { "source": 7, "target": 6, "capacity_lps": 400, "base_leak": 0.09 },
+    { "source": 6, "target": 5, "capacity_lps": 350, "base_leak": 0.11 },
+    { "source": 5, "target": 17, "capacity_lps": 300, "base_leak": 0.10 },
+    { "source": 5, "target": 3, "capacity_lps": 400, "base_leak": 0.13 },
+    { "source": 17, "target": 15, "capacity_lps": 300, "base_leak": 0.09 },
+    { "source": 3, "target": 4, "capacity_lps": 300, "base_leak": 0.13 },
+    { "source": 4, "target": 11, "capacity_lps": 300, "base_leak": 0.10 },
+    { "source": 1, "target": 11, "capacity_lps": 600, "base_leak": 0.07 },
+    { "source": 1, "target": 10, "capacity_lps": 600, "base_leak": 0.07 },
+    { "source": 11, "target": 10, "capacity_lps": 300, "base_leak": 0.09 },
+    { "source": 10, "target": 4, "capacity_lps": 250, "base_leak": 0.10 },
+    { "source": 1, "target": 4, "capacity_lps": 400, "base_leak": 0.09 },
+    { "source": 3, "target": 14, "capacity_lps": 350, "base_leak": 0.12 },
+    { "source": 14, "target": 12, "capacity_lps": 300, "base_leak": 0.10 },
+    { "source": 2, "target": 12, "capacity_lps": 500, "base_leak": 0.07 },
+    { "source": 2, "target": 13, "capacity_lps": 600, "base_leak": 0.06 },
+    { "source": 13, "target": 16, "capacity_lps": 300, "base_leak": 0.08 },
+    { "source": 2, "target": 16, "capacity_lps": 500, "base_leak": 0.06 },
+    { "source": 16, "target": 15, "capacity_lps": 250, "base_leak": 0.09 },
+    { "source": 15, "target": 18, "capacity_lps": 250, "base_leak": 0.10 },
+    { "source": 18, "target": 14, "capacity_lps": 250, "base_leak": 0.11 },
+    { "source": 18, "target": 12, "capacity_lps": 200, "base_leak": 0.10 },
+    { "source": 9, "target": 8, "capacity_lps": 300, "base_leak": 0.12 },
+    { "source": 3, "target": 9, "capacity_lps": 350, "base_leak": 0.13 },
+    { "source": 1, "target": 8, "capacity_lps": 500, "base_leak": 0.08 },
+    { "source": 8, "target": 12, "capacity_lps": 250, "base_leak": 0.11 },
+    { "source": 9, "target": 14, "capacity_lps": 250, "base_leak": 0.12 },
+    { "source": 11, "target": 8, "capacity_lps": 250, "base_leak": 0.10 }
+  ]
+}
