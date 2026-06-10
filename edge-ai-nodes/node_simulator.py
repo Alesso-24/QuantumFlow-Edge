@@ -11,8 +11,13 @@ import argparse
 import asyncio
 import math
 import random
+import sys
 
 import httpx
+
+# Consolas Windows usan cp1252 por defecto; forzamos UTF-8 para los emojis
+if sys.stdout.encoding and sys.stdout.encoding.lower() != "utf-8":
+    sys.stdout.reconfigure(encoding="utf-8")
 
 BACKEND = "http://localhost:8000"
 
