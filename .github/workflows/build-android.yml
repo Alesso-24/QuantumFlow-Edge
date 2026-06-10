@@ -3,7 +3,6 @@ name: Build — APK Android
 on:
   push:
     branches: [main]
-    paths: ["multiplatform-app/**", ".github/workflows/build-android.yml"]
     tags: ["v*"]
   workflow_dispatch:
 
