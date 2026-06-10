@@ -7,23 +7,17 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: read
-  pages: write
-  id-token: write
+  contents: write
 
 concurrency:
   group: pages
   cancel-in-progress: true
 
 jobs:
-  build:
+  build-deploy:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Habilitar GitHub Pages si no existe
-        uses: actions/configure-pages@v5
-        with:
-          enablement: true
       - uses: actions/setup-node@v4
         with:
           node-version: 20
@@ -35,16 +29,8 @@ jobs:
       - name: Exportar build web estático
         working-directory: multiplatform-app
         run: npx expo export --platform web
-      - uses: actions/upload-pages-artifact@v3
+      - name: Publicar en rama gh-pages
+        uses: peaceiris/actions-gh-pages@v4
         with:
-          path: multiplatform-app/dist
-
-  deploy:
-    needs: build
-    runs-on: ubuntu-latest
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    steps:
-      - id: deployment
-        uses: actions/deploy-pages@v4
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: multiplatform-app/dist
